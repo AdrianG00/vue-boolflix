@@ -5,10 +5,13 @@
        <ul>
         <li v-for="(item) in items" :key="item.id">
           id: {{item.id}}<br />
+          <img :src="'https://image.tmdb.org/t/p/w342/' + item.poster_path" alt=""> 
           titolo originale: {{item.original_title ? item.original_title : item.original_name}}<br />
           titolo: {{item.title ? item.title : item.name}}<br />
           lingua: <country-flag :country='language(item)' size='small'/><br />
-          voto: {{item.vote_average}}<br />
+          voto: <i v-for="index in ratingMath(item.vote_average)" :key="index" class="fa-solid fa-star"></i>
+          <span v-if="item.vote_average === 0"><i class="fa-regular fa-star"></i></span>
+          <br />
         </li>
       </ul>
      
@@ -45,7 +48,13 @@ export default {
             }else{
                 return film.original_language
             }
+        },
+
+        ratingMath(number){
+            return Math.round(number /2)
         }
+
+
     }
 }
 </script>
