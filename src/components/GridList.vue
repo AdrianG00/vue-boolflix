@@ -1,63 +1,37 @@
-
 <template>
-    <section>
-        <h2>{{title}}</h2>
-       <ul>
-        <li v-for="(item) in items" :key="item.id">
-          id: {{item.id}}<br />
-          <img :src="'https://image.tmdb.org/t/p/w342/' + item.poster_path" alt=""> 
-          titolo originale: {{item.original_title ? item.original_title : item.original_name}}<br />
-          titolo: {{item.title ? item.title : item.name}}<br />
-          lingua: <country-flag :country='language(item)' size='small'/><br />
-          voto: <i v-for="index in ratingMath(item.vote_average)" :key="index" class="fa-solid fa-star"></i>
-          <span v-if="item.vote_average === 0"><i class="fa-regular fa-star"></i></span>
-          <br />
-        </li>
-      </ul>
-     
-    </section>
+  <section class="grid-container">
+    
+      <div
+        class="grid-card"
+        v-for="(movie, index) in searchAll"
+        :key="index"
+      >
+        <card-component :item="movie" />
+      </div>
+    
+  </section>
 </template>
 
 <script>
-import CountryFlag from 'vue-country-flag'
-//import {state, actions} from '../store.js'
+import { state } from "../store.js";
+import CardComponent from "./CardComponent.vue";
+
 export default {
-    name: 'GridList',
-    components:{CountryFlag},
-    props:{
-        items: Array,
-        loader: Boolean,
-        title: String
-    },//['items','loader'],
-    data(){
-        return {
-            
-        }
+  name: "GridList",
+  components: { CardComponent },
+  computed: {
+    searchAll() {
+      return state.searchAll;
     },
-    computed: {
-        // mysearch(){
-        //     return state.search
-        // }
-    },
-    methods:{
-        language(film){
-            if(film.original_language === 'en'){
-                return film.original_language = 'gb'
-            }else if(film.original_language === 'ja'){
-                return film.original_language = 'jp'
-            }else{
-                return film.original_language
-            }
-        },
-
-        ratingMath(number){
-            return Math.round(number /2)
-        }
-
-
-    }
-}
+  },
+};
 </script>
 
 <style lang="scss">
+@import '../styles/general.scss'; 
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+}
 </style>
